@@ -1,0 +1,42 @@
+<ion-app>
+  <ion-header>
+    <app-navbar></app-navbar>
+  </ion-header>
+
+  <ion-content fullscreen class="ion-padding">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="3">
+        </ion-col>
+
+        <ion-col size="12" size-md="9">
+          <ion-text class="ion-text-center">
+            <h1>{{ titulo }}</h1>
+          </ion-text>
+
+          <section class="ion-margin-top ion-margin-bottom">
+            <ion-text>
+              <h2>¿Quiénes somos?</h2>
+              <p>{{ descripcion }}</p>
+            </ion-text>
+          </section>
+
+          <section class="ion-margin-top ion-margin-bottom">
+            <ion-text>
+              <h2>Misión</h2>
+              <p>{{ mision }}</p>
+            </ion-text>
+          </section>
+
+          <section class="ion-margin-top ion-margin-bottom">
+            <ion-text>
+              <h2>Visión</h2>
+              <p>{{ vision }}</p>
+            </ion-text>
+          </section>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+
+</ion-app>

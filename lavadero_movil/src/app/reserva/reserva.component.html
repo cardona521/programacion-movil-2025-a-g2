@@ -1,0 +1,96 @@
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <app-navbar></app-navbar>
+
+        <div class="ion-padding">
+
+          <!-- Formulario de reserva -->
+          <form *ngIf="!reservaSeleccionada" (ngSubmit)="crearreserva()">
+            <ion-item>
+              <ion-label>Vehículo</ion-label>
+              <ion-select
+                [(ngModel)]="RegisVehiculo.vehiculo.id"
+                name="vehiculoId"
+                (ionChange)="onVehiculoSeleccionado(RegisVehiculo.vehiculo.id ?? 0)"
+                placeholder="Seleccione su vehículo"
+                required
+              >
+                <ion-select-option *ngFor="let item of vehiculos" [value]="item.id">
+                  {{ item.placa }} - {{ item.modelo }} - {{ item.color }} - {{ item.tipo }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Fecha de la Reserva</ion-label>
+              <ion-datetime
+                display-format="YYYY-MM-DD"
+                [(ngModel)]="RegisVehiculo.fecha"
+                name="fecha"
+                required
+              ></ion-datetime>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Tipo de servicios</ion-label>
+              <ion-select
+                [(ngModel)]="RegisVehiculo.tipo"
+                name="tipo"
+                placeholder="Seleccione una opción"
+                required
+              >
+                <ion-select-option *ngFor="let tipo of tiposServicio" [value]="tipo">
+                  {{ tipo }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-button expand="block" type="submit" class="ion-margin-top">
+              Registrar Reserva
+            </ion-button>
+          </form>
+
+          <!-- Paso 1: Opciones de pago -->
+          <ion-card *ngIf="reservaSeleccionada && !mostrarFactura" class="ion-margin-top">
+            <ion-card-header>
+              <ion-card-title>Resumen de la Reserva</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>ID:</strong> {{ reservaSeleccionada.id }}</p>
+              <p><strong>Fecha:</strong> {{ reservaSeleccionada.fechaReserva }}</p>
+              <p><strong>Servicio:</strong> {{ reservaSeleccionada.servicio }}</p>
+
+              <ion-item-divider></ion-item-divider>
+              <ion-label class="ion-padding-top ion-padding-bottom">Selecciona un método de pago</ion-label>
+              <ion-button expand="block" fill="outline" (click)="mostrarResumenPago('Tarjeta')">Tarjeta</ion-button>
+              <ion-button expand="block" fill="outline" (click)="mostrarResumenPago('PayPal')">Transferencia</ion-button>
+              <ion-button expand="block" fill="outline" (click)="mostrarResumenPago('Efectivo')">Efectivo</ion-button>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Paso 2: Factura -->
+          <ion-card *ngIf="mostrarFactura" class="ion-margin-top ion-text-center">
+            <ion-card-header>
+              <ion-card-title>Factura de la Reserva</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>N° Reserva:</strong> {{ reservaSeleccionada.id }}</p>
+              <p><strong>Vehículo:</strong> {{ reservaSeleccionada.vehiculo.placa }}</p>
+              <p><strong>Fecha:</strong> {{ reservaSeleccionada.fechaReserva }}</p>
+              <p><strong>Servicio:</strong> {{ reservaSeleccionada.servicio }}</p>
+              <p><strong>Método de Pago:</strong> {{ metodoPago }}</p>
+              <p><strong>Estado:</strong> {{ reservaSeleccionada.estado }}</p>
+
+              <ion-button expand="block" fill="outline" class="ion-margin-top" (click)="nuevaReserva()">
+                Registrar Otra Reserva
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,72 @@
+<ion-content>
+  <!-- Contenido principal sin barra lateral -->
+  <app-navbar></app-navbar>
+
+  <!-- Contenido de servicios -->
+  <div class="container py-4">
+
+    <!-- Sección Carros -->
+    <section class="mb-5">
+      <div class="text-center">
+        <h2>Carros</h2>
+        <p>Selecciona el servicio que deseas reservar</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4 col-lg-3" *ngFor="let servicio of serviciosCarros">
+          <ion-card>
+            <img [src]="'assets/' + servicio.imagen" alt="{{ servicio.nombre }}" class="card-img-top" />
+            <ion-card-header>
+              <ion-card-title>{{ servicio.nombre }}</ion-card-title>
+              <p class="card-text">${{ servicio.precio }}</p>
+              <ion-button fill="outline" size="small" color="primary">Saber más</ion-button>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Motos -->
+    <section class="mb-5">
+      <div class="text-center">
+        <h2>Motos</h2>
+        <p>Selecciona el servicio que deseas reservar</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4 col-lg-3" *ngFor="let servicio of serviciosMotos">
+          <ion-card>
+            <img [src]="'assets/' + servicio.imagen" alt="{{ servicio.nombre }}" class="card-img-top" />
+            <ion-card-header>
+              <ion-card-title>{{ servicio.nombre }}</ion-card-title>
+              <p class="card-text">${{ servicio.precio }}</p>
+              <ion-button fill="outline" size="small" color="primary">Saber más</ion-button>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Bus -->
+    <section>
+      <div class="text-center">
+        <h2>Bus</h2>
+        <p>Selecciona el servicio que deseas reservar</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4 col-lg-3" *ngFor="let servicio of serviciosBus">
+          <ion-card>
+            <img [src]="'assets/' + servicio.imagen" alt="{{ servicio.nombre }}" class="card-img-top" />
+            <ion-card-header>
+              <ion-card-title>{{ servicio.nombre }}</ion-card-title>
+              <p class="card-text">${{ servicio.precio }}</p>
+              <ion-button fill="outline" size="small" color="primary">Saber más</ion-button>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</ion-content>

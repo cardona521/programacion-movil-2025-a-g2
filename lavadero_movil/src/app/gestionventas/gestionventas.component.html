@@ -1,0 +1,95 @@
+<ion-header>
+  <app-navbar></app-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="3">
+
+      </ion-col>
+
+      <ion-col size="12" size-md="9">
+        <ion-card class="ion-padding">
+          <ion-card-header>
+            <ion-card-title class="ion-text-center">Registro de Venta Directa</ion-card-title>
+          </ion-card-header>
+
+          <form [formGroup]="formulario" (ngSubmit)="registrarVenta()">
+            <ion-item>
+              <ion-label position="floating">Placa</ion-label>
+              <ion-input formControlName="placa"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Tipo de Vehículo</ion-label>
+              <ion-select formControlName="tipo" (ionChange)="cargarTiposServicioPorVehiculo($event.detail.value)" interface="popover" placeholder="Seleccione">
+                <ion-select-option *ngFor="let tipo of tiposVehiculo" [value]="tipo">{{ tipo }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Marca</ion-label>
+              <ion-input formControlName="marca"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Modelo</ion-label>
+              <ion-input formControlName="modelo"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Tipo de Servicio</ion-label>
+              <ion-select formControlName="servicio" interface="popover" placeholder="Seleccione">
+                <ion-select-option *ngFor="let servicio of tiposServicio" [value]="servicio">{{ servicio }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-button expand="block" type="submit" class="ion-margin-top">Registrar venta</ion-button>
+          </form>
+
+          <!-- Paso 1: Opciones de pago -->
+          <ion-card *ngIf="reservaSeleccionada && !mostrarFactura" color="tertiary" class="ion-margin-top">
+            <ion-card-header>
+              <ion-card-subtitle>Resumen de la Reserva</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>ID:</strong> {{ reservaSeleccionada.id }}</p>
+              <p><strong>Fecha:</strong> {{ reservaSeleccionada.fechaReserva }}</p>
+              <p><strong>Servicio:</strong> {{ reservaSeleccionada.servicio }}</p>
+
+              <h5>Selecciona un método de pago</h5>
+              <ion-button expand="block" fill="outline" color="primary" (click)="mostrarResumenPago('Tarjeta')">Tarjeta</ion-button>
+              <ion-button expand="block" fill="outline" color="medium" (click)="mostrarResumenPago('PayPal')">Transferencia</ion-button>
+              <ion-button expand="block" fill="outline" color="success" (click)="mostrarResumenPago('Efectivo')">Efectivo</ion-button>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Paso 2: Mostrar factura -->
+          <ion-card *ngIf="mostrarFactura" color="success" class="ion-margin-top">
+            <ion-card-header>
+              <ion-card-subtitle>Factura de la Reserva</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>N° Reserva:</strong> {{ reservaSeleccionada.id }}</p>
+              <p><strong>Vehículo:</strong> {{ reservaSeleccionada.vehiculo.placa }}</p>
+              <p><strong>Fecha:</strong> {{ reservaSeleccionada.fechaReserva }}</p>
+              <p><strong>Servicio:</strong> {{ reservaSeleccionada.servicio }}</p>
+              <p><strong>Método de Pago:</strong> {{ metodoPago }}</p>
+              <p><strong>Estado:</strong> {{ reservaSeleccionada.estado }}</p>
+
+              <ion-button expand="block" fill="outline" color="primary" (click)="nuevaReserva()">
+                Registrar Otra Reserva
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-text color="primary" class="ion-text-center" *ngIf="mensaje">
+            {{ mensaje }}
+          </ion-text>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+

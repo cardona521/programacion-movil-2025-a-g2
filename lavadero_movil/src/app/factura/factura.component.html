@@ -1,0 +1,215 @@
+
+  <ion-header>
+    <app-navbar></app-navbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+    <!-- Formulario de Filtros -->
+    <form (ngSubmit)="aplicarFiltros()">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-item>
+              <ion-label position="floating">Placa</ion-label>
+              <ion-input [(ngModel)]="filtros.placa" name="placa"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-item>
+              <ion-label>Tipo de vehículo</ion-label>
+              <ion-select [(ngModel)]="filtros.tipoVehiculo" name="tipoVehiculo">
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option value="Carro">Carro</ion-select-option>
+                <ion-select-option value="Moto">Moto</ion-select-option>
+                <ion-select-option value="Bus">Bus</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item>
+              <ion-label>Tipo de servicio</ion-label>
+              <ion-select [(ngModel)]="filtros.servicio" name="servicio">
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option value="Lavado Express $100.000">Lavado Express</ion-select-option>
+                <ion-select-option value="Lavado a vapor $110.000">Lavado a vapor</ion-select-option>
+                <ion-select-option value="Lavado completo $100.000">Lavado completo</ion-select-option>
+                <ion-select-option value="Lavado de motor $90.000">Lavado de motor</ion-select-option>
+                <ion-select-option value="Lavado interno $90.000">Lavado interno</ion-select-option>
+                <ion-select-option value="Lavado básico moto $50.000">Lavado básico moto</ion-select-option>
+                <ion-select-option value="Lavado cadena $20.000">Lavado cadena</ion-select-option>
+                <ion-select-option value="Engrase $30.000">Engrase</ion-select-option>
+                <ion-select-option value="Lavado general bus $50.000">Lavado general bus</ion-select-option>
+                <ion-select-option value="Limpieza de asientos $70.000">Limpieza de asientos</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-padding-top">
+          <ion-col size="6">
+            <ion-button expand="block" type="submit" color="primary">Buscar</ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" fill="outline" color="medium" (click)="resetFiltros()">Limpiar</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+
+    <!-- Lista de Reservas -->
+    <ng-container *ngIf="!mostrarDetalle && !mostrarFacturaFinal">
+  <ion-card *ngFor="let reserva of reservas">
+    <ion-card-header>
+      <ion-card-title>
+        #{{ reserva.id }} - {{ reserva.vehiculo?.placa }} - {{ reserva.servicio }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        Fecha: {{ reserva.fechaReserva | date: 'dd/MM/yyyy' }}<br />
+        Estado: {{ reserva.estado }}<br />
+        Pago: {{ reserva.metodoPago || 'No registrado' }}<br />
+        Usuario: {{ reserva.user?.nombre || 'Sin nombre' }}
+      </p>
+      <ion-button size="small" (click)="verDetalle(reserva)">Ver Detalle</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ng-container>
+
+
+    <!-- Detalle de la Reserva -->
+    <ion-card *ngIf="mostrarDetalle && !mostrarFacturaFinal">
+      <ion-card-header color="primary">
+        <ion-card-title class="ion-text-center">Detalle de la Factura</ion-card-title>
+      </ion-card-header>
+      <ion-card-content *ngIf="reservaSeleccionada">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <p><strong>N° Reserva:</strong> #{{ reservaSeleccionada.id }}</p>
+              <p><strong>Fecha:</strong> {{ reservaSeleccionada.fechaReserva | date: 'dd/MM/yyyy' }}</p>
+              <p><strong>Método de Pago:</strong> {{ metodoPago || 'No seleccionado' }}</p>
+            </ion-col>
+            <ion-col>
+              <p><strong>Vehículo:</strong> {{ reservaSeleccionada.vehiculo?.placa || 'Sin placa' }}</p>
+              <p><strong>Modelo:</strong> {{ reservaSeleccionada.vehiculo?.modelo || 'Sin modelo' }}</p>
+              <p><strong>Servicio:</strong> {{ reservaSeleccionada.servicio }}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-item color="light">
+          <ion-label>
+            <strong>Subtotal Servicio:</strong> ${{ reservaSeleccionada.precio }}
+          </ion-label>
+        </ion-item>
+
+        <ion-label class="ion-padding-top"><strong>Productos adicionales</strong></ion-label>
+        <ion-list>
+          <ion-item *ngFor="let producto of productosLavadero">
+            <ion-checkbox
+              slot="start"
+              [checked]="productosSeleccionados.includes(producto)"
+              [disabled]="reservaSeleccionada.facturada"
+              (ionChange)="actualizarProductosSeleccionados($event, producto)">
+            </ion-checkbox>
+            <ion-label>{{ producto.nombre }} - ${{ producto.precio }}</ion-label>
+          </ion-item>
+        </ion-list>
+
+        <ion-item *ngIf="productosSeleccionados.length > 0" color="light">
+          <ion-label>
+            <strong>Productos Seleccionados:</strong><br />
+            <span *ngFor="let prod of productosSeleccionados">{{ prod.nombre }} (${{ prod.precio }}), </span>
+          </ion-label>
+        </ion-item>
+
+        <ion-label class="ion-padding-top"><strong>Método de Pago</strong></ion-label>
+        <ion-list>
+          <ion-radio-group [(ngModel)]="metodoPago" name="metodoPago">
+            <ion-item *ngFor="let metodo of metodosPago">
+              <ion-label>{{ metodo }}</ion-label>
+              <ion-radio slot="start" [value]="metodo" [disabled]="reservaSeleccionada.facturada"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+
+        <ion-item color="success">
+          <ion-label>
+            <h5>Total a Pagar: <strong>${{ calcularTotal() }}</strong></h5>
+          </ion-label>
+        </ion-item>
+
+        <ion-text color="warning" *ngIf="reservaSeleccionada.facturada">
+          <p class="ion-padding-top">Esta reserva ya ha sido facturada.</p>
+        </ion-text>
+
+        <ion-grid class="ion-padding-top">
+          <ion-row>
+            <ion-col size="6">
+              <ion-button expand="block" fill="outline" color="medium" (click)="cerrarDetalle()">Cancelar</ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button expand="block" color="success" (click)="generarFactura()" [disabled]="reservaSeleccionada.facturada || !metodoPago">
+                Generar Factura
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Factura Final -->
+    <div *ngIf="mostrarFacturaFinal" id="facturaPDF">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title class="ion-text-center">Factura de Servicio</ion-card-title>
+          <ion-text color="medium" class="ion-text-center">Fecha: {{ getFechaActual() }}</ion-text>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <p><strong>N° Reserva:</strong> #{{ reservaSeleccionada.id }}</p>
+                <p><strong>Fecha de Reserva:</strong> {{ reservaSeleccionada.fechaReserva | date: 'dd/MM/yyyy' }}</p>
+              </ion-col>
+              <ion-col>
+                <p><strong>Vehículo:</strong> {{ reservaSeleccionada.vehiculo?.placa }}</p>
+                <p><strong>Modelo:</strong> {{ reservaSeleccionada.vehiculo?.modelo }}</p>
+                <p><strong>Tipo:</strong> {{ reservaSeleccionada.vehiculo?.tipo }}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-list>
+            <ion-item>
+              <ion-label>{{ reservaSeleccionada.servicio }}</ion-label>
+              <ion-note slot="end">${{ reservaSeleccionada.precio }}</ion-note>
+            </ion-item>
+            <ion-item *ngFor="let prod of productosSeleccionados">
+              <ion-label>{{ prod.nombre }}</ion-label>
+              <ion-note slot="end">${{ prod.precio }}</ion-note>
+            </ion-item>
+            <ion-item color="light">
+              <ion-label><strong>Total</strong></ion-label>
+              <ion-note slot="end"><strong>${{ calcularTotal() }}</strong></ion-note>
+            </ion-item>
+          </ion-list>
+
+          <p><strong>Método de Pago:</strong> {{ metodoPago }}</p>
+        </ion-card-content>
+        <div class="ion-text-center" style="padding: 16px;">
+          <ion-text color="success"><strong>¡Gracias por preferirnos!</strong></ion-text>
+        </div>
+      </ion-card>
+      <ion-button expand="block" color="danger" (click)="exportarPDF()">Exportar a PDF</ion-button>
+      <ion-button expand="block" color="medium" (click)="cerrarFacturaFinal()">Cerrar</ion-button>
+    </div>
+</ion-content>

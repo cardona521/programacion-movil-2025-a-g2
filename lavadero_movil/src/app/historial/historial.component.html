@@ -1,0 +1,97 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+  
+    <ion-router-outlet id="main-content">
+      <ion-header>
+        <app-navbar></app-navbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <!-- Formulario filtros -->
+        <form (ngSubmit)="aplicarFiltros()">
+
+          <ion-item>
+            <ion-label position="floating">Vehículo (Placa)</ion-label>
+            <ion-input [(ngModel)]="filtros.placa" name="placa" type="text"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Tipo de vehículo</ion-label>
+            <ion-select [(ngModel)]="filtros.tipoVehiculo" name="tipoVehiculo" interface="popover">
+              <ion-select-option value="">Todos</ion-select-option>
+              <ion-select-option value="Carro">Carro</ion-select-option>
+              <ion-select-option value="Moto">Moto</ion-select-option>
+              <ion-select-option value="Bus">Bus</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Tipo de servicio</ion-label>
+            <ion-select [(ngModel)]="filtros.servicio" name="servicio" interface="popover">
+              <ion-select-option value="">Todos</ion-select-option>
+              <ion-select-option value="Lavado Express $100.000">Lavado Express</ion-select-option>
+              <ion-select-option value="Lavado a vapor $110.000">Lavado a vapor</ion-select-option>
+              <ion-select-option value="Lavado completo $100.000">Lavado completo</ion-select-option>
+              <ion-select-option value="Lavado de motor $90.000">Lavado de motor</ion-select-option>
+              <ion-select-option value="Lavado interno $90.000">Lavado interno</ion-select-option>
+              <ion-select-option value="Lavado básico moto $50.000">Lavado básico moto</ion-select-option>
+              <ion-select-option value="Lavado cadena $20.000">Lavado cadena</ion-select-option>
+              <ion-select-option value="Engrase $30.000">Engrase</ion-select-option>
+              <ion-select-option value="Lavado general bus $50.000">Lavado general bus</ion-select-option>
+              <ion-select-option value="Limpieza de asientos $70.000">Limpieza de asientos</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" color="primary" class="ion-margin-top">Buscar</ion-button>
+          <ion-button expand="block" type="button" color="medium" (click)="resetFiltros()">Limpiar</ion-button>
+        </form>
+
+        <!-- Título -->
+        <h2 class="ion-text-center ion-margin-top">
+          {{ isAdmin ? 'Historial de Reservas (Admin)' : 'Tu Historial de Reservas' }}
+        </h2>
+
+        <!-- Listado -->
+        <ion-list *ngIf="reservas.length > 0; else noReservas">
+          <ion-item *ngFor="let reserva of reservas" lines="full">
+            <ion-label>
+              <h3>ID: {{ reserva.id }}</h3>
+              <p>Fecha: {{ reserva.fechaReserva | date:'dd/MM/yyyy' }}</p>
+              <p>Servicio: {{ reserva.servicio }}</p>
+              <p>Método de Pago: {{ reserva.metodoPago || 'No registrado' }}</p>
+              <p *ngIf="isAdmin">Usuario: {{ reserva.user?.nombre || 'Sin nombre' }}</p>
+              <p *ngIf="isAdmin">Vehículo: {{ reserva.vehiculo?.placa || 'Sin placa' }}</p>
+
+              <ion-badge [color]="
+                reserva.estado === 'Confirmada' ? 'success' :
+                reserva.estado === 'Cancelada' ? 'danger' :
+                'warning'
+              ">
+                {{ reserva.estado }}
+              </ion-badge>
+            </ion-label>
+
+            <ion-button fill="clear" slot="end" color="danger"
+              [disabled]="reserva.estado === 'Cancelada'"
+              (click)="eliminarReserva(reserva.id)">
+              Eliminar
+            </ion-button>
+
+            <ion-button fill="clear" slot="end" color="primary"
+              [disabled]="reserva.estado === 'Cancelada'"
+              (click)="actualizarReserva(reserva.id, 'cancelado')">
+              Editar
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <ng-template #noReservas>
+          <ion-text color="medium" class="ion-text-center ion-padding">
+            No hay reservas disponibles.
+          </ion-text>
+        </ng-template>
+      </ion-content>
+    </ion-router-outlet>
+  </ion-split-pane>
+
+</ion-app>

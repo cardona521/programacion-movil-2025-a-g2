@@ -1,0 +1,80 @@
+<ion-content class="ion-padding">
+  <div class="container ion-text-center">
+    <ion-grid class="ion-no-padding" style="max-width: 900px; margin: auto;">
+      <ion-row>
+        <!-- Imagen lateral en pantallas grandes -->
+        <ion-col size="12" size-md="6" class="ion-hide-md-down">
+          <img src="assets/Imagen6.png" alt="Lavadero Luxury" class="img-fluid" style="height: 100%; object-fit: cover;">
+        </ion-col>
+
+        <!-- Formulario de registro -->
+        <ion-col size="12" size-md="6">
+          <h2 class="ion-text-center">Registrarse</h2>
+
+          <form (ngSubmit)="register()" #form="ngForm" novalidate>
+
+            <ion-item>
+              <ion-label position="floating">Nombre *</ion-label>
+              <ion-input [(ngModel)]="usuario.nombre" name="registroNombre" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Correo *</ion-label>
+              <ion-input type="email" [(ngModel)]="usuario.correo" name="registroCorreo" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Contraseña *</ion-label>
+              <ion-input type="password" [(ngModel)]="usuario.password" name="registroPassword" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Celular *</ion-label>
+              <ion-input type="tel" [(ngModel)]="usuario.celular" name="registroCelular" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Cédula *</ion-label>
+              <ion-input type="text" [(ngModel)]="usuario.cedula" name="registroCedula" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Tipo de Cédula *</ion-label>
+              <ion-select [(ngModel)]="usuario.tipoCedula" name="registroTipoCedula" interface="popover" required>
+                <ion-select-option value="CC">Cédula de Ciudadanía</ion-select-option>
+                <ion-select-option value="CE">Cédula de Extranjería</ion-select-option>
+                <ion-select-option value="TI">Tarjeta de Identidad</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Rol *</ion-label>
+              <ion-select [(ngModel)]="usuario.rol" name="registroRol" interface="popover" required>
+                <ion-select-option value="cliente">Cliente</ion-select-option>
+                <ion-select-option value="admin">Administrador</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-button expand="block" type="submit" color="dark" class="ion-margin-top">
+              Registrarse
+            </ion-button>
+          </form>
+
+          <ion-text class="ion-margin-top">
+            ¿Ya tienes una cuenta?
+            <a routerLink="/inicio-sesion">Iniciar Sesión</a>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Alertas -->
+  <ion-alert
+    *ngIf="alerta"
+    [isOpen]="true"
+    [header]="alerta.titulo"
+    [message]="alerta.mensaje"
+    [buttons]="[{ text: 'OK', role: 'confirm', handler: onAlertConfirm.bind(this) }]"
+  ></ion-alert>
+</ion-content>

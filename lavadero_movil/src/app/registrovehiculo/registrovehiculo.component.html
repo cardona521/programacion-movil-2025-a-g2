@@ -1,0 +1,57 @@
+<ion-content>
+  <div class="d-flex">
+    
+    <!-- Contenido principal -->
+    <div class="content-area flex-grow-1 d-flex flex-column">
+      <!-- Navbar -->
+      <app-navbar></app-navbar>
+
+      <!-- Contenido central -->
+      <div class="main-content d-flex justify-content-center align-items-center flex-grow-1">
+        <ion-card class="form-container">
+          <ion-card-header>
+            <ion-card-title class="text-center">Registrar Vehículo</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <form (submit)="registrarVehiculo()">
+              <ion-item>
+                <ion-label position="floating">Placa del Vehículo</ion-label>
+                <ion-input type="text" [(ngModel)]="RegisVehiculo.placa" name="placa" required></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Color</ion-label>
+                <ion-input type="text" [(ngModel)]="RegisVehiculo.color" name="color" required></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Modelo</ion-label>
+                <ion-input type="text" [(ngModel)]="RegisVehiculo.modelo" name="modelo" required></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Marca</ion-label>
+                <ion-input type="text" [(ngModel)]="RegisVehiculo.marca" name="marca" required></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Tipo de Vehículo</ion-label>
+                <ion-select [(ngModel)]="RegisVehiculo.tipo" name="tipo" interface="popover" placeholder="Seleccione un tipo">
+                  <ion-select-option value="carro">Carro</ion-select-option>
+                  <ion-select-option value="moto">Moto</ion-select-option>
+                  <ion-select-option value="bus">Bus</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-button type="submit" expand="block" class="ion-margin-top" color="primary">
+                Registrar Vehículo
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

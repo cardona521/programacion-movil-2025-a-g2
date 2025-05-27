@@ -1,0 +1,41 @@
+<ion-content class="ion-padding">
+  <div class="d-flex">
+    <!-- Barra lateral -->
+    <app-menu></app-menu>
+
+    <!-- Contenido principal -->
+    <div class="content-area flex-grow-1 d-flex flex-column">
+      <!-- Navbar -->
+      <app-navbar></app-navbar>
+
+      <!-- Contenido central -->
+      <div class="container py-5">
+        <ion-card class="mx-auto" style="max-width: 600px;">
+          <ion-card-header>
+            <ion-card-title class="text-center">Mi Perfil</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div *ngIf="usuario; else sinUsuario">
+              <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+              <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+              <p><strong>Celular:</strong> {{ usuario.celular }}</p>
+              <p><strong>Cédula:</strong> {{ usuario.cedula }}</p>
+              <p><strong>Tipo de Cédula:</strong> {{ usuario.tipoCedula }}</p>
+              <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+
+              <ion-button expand="block" color="danger" class="ion-margin-top" (click)="cerrarSesion()">
+                Cerrar Sesión
+              </ion-button>
+            </div>
+
+            <ng-template #sinUsuario>
+              <p class="text-center">No se encontró información del usuario.</p>
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

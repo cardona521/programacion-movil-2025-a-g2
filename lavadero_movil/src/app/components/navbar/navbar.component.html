@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="light">
+    
+    <!-- Botón de menú hamburguesa -->
+    <ion-buttons slot="start">
+        <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+
+
+    <!-- Buscador y perfil al lado derecho -->
+    <ion-buttons slot="end" class="d-flex align-items-center">
+
+      <!-- Campo de búsqueda -->
+      <ion-item lines="none">
+        <ion-icon name="search-outline" slot="start"></ion-icon>
+        <ion-input placeholder="Buscar"></ion-input>
+      </ion-item>
+
+      <!-- Perfil -->
+      <ion-title class="ms-3">
+        <a class="fw-bold" href="/perfil" style="text-decoration: none; color: inherit;">
+          Perfil
+        </a>
+        <ion-icon name="person-outline" class="ms-1"></ion-icon>
+      </ion-title>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
